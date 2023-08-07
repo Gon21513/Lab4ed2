@@ -1,3 +1,5 @@
+//slave
+
 /*
  * File:   labed2slave.c
  * Author: Luis Pedro Gonzalez 21513
@@ -59,8 +61,8 @@ void __interrupt() isr(void){
 //    // ---- INTERRUPCION DEL ADC --------
     if (PIR1bits.ADIF == 1){ // Chequear bandera del conversor ADC
         
-        ADC = read_ADC();
-        numadc = ADC; // pasar valor del adc a num1
+        numadc = read_ADC();
+        //numadc = ADC; // pasar valor del adc a num1
         PIR1bits.ADIF = 0; // Borrar el indicador del conversor ADC
 
     }
@@ -76,17 +78,19 @@ void __interrupt() isr(void){
             SSPCONbits.CKP = 1;         // Enables SCL (Clock)
         }
 
-//        if(!SSPSTATbits.D_nA && !SSPSTATbits.R_nW) {
-//            //__delay_us(7);
-//            z = SSPBUF;                 // Lectura del SSBUF para limpiar el buffer y la bandera BF
-//            //__delay_us(2);
-//            PIR1bits.SSPIF = 0;         // Limpia bandera de interrupci?n recepci?n/transmisi?n SSP
-//            SSPCONbits.CKP = 1;         // Habilita entrada de pulsos de reloj SCL
-//            while(!SSPSTATbits.BF);     // Esperar a que la recepci?n se complete
-//            PORTD = SSPBUF;             // Guardar en el PORTD el valor del buffer de recepci?n
-//            __delay_us(250);
-//            
-//        }
+        if(!SSPSTATbits.D_nA && !SSPSTATbits.R_nW) {
+            //__delay_us(7);
+            z = SSPBUF;                 // Lectura del SSBUF para limpiar el buffer y la bandera BF
+            //__delay_us(2);
+            PIR1bits.SSPIF = 0;         // Limpia bandera de interrupci?n recepci?n/transmisi?n SSP
+            SSPCONbits.CKP = 1;         // Habilita entrada de pulsos de reloj SCL
+            while(!SSPSTATbits.BF);     // Esperar a que la recepci?n se complete
+            //PORTD = SSPBUF;             // Guardar en el PORTD el valor del buffer de recepci?n
+            __delay_us(250);
+            
+        }
+        
+        
         else if(!SSPSTATbits.D_nA && SSPSTATbits.R_nW){
             z = SSPBUF;
             BF = 0;
@@ -110,7 +114,6 @@ void main(void) {
     // Loop infinito
     //*************************************************************************
     while(1){
-        PORTB = numadc;
         
                 //verifica la conversion adc
         if (ADCON0bits.GO == 0){
@@ -125,7 +128,7 @@ void main(void) {
 // Funci?n de Inicializaci?n
 //*****************************************************************************
 void setup(void){
-    ANSEL = 0; // Solo AN0 es analógico, el resto son digitales
+    //ANSEL = 0; // Solo AN0 es analógico, el resto son digitales
     ANSELH = 0;
     
     //TRISA = 1;
@@ -135,14 +138,21 @@ void setup(void){
     TRISB = 0;
     TRISD = 0;
     
+    PORTA = 0;
     PORTB = 0;
     PORTD = 0;
+    //PORTC = 0;
+    
+    I2C_Slave_Init(0x50);   
+
     
     //// --------------- Oscilador --------------- 
     OSCCONbits.IRCF = 0b111; // 8 MHz
     OSCCONbits.SCS = 1; // Seleccionar oscilador interno
     
     //INTCONbits.GIE = 1;         // Habilitamos interrupciones
-
-    I2C_Slave_Init(0x50);   
+    INTCONbits.GIE = 1;
+    INTCONbits.PEIE = 1;
+    
+    
 }

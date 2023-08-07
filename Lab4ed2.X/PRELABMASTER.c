@@ -9,7 +9,7 @@
 // Palabra de configuraci?n
 //*****************************************************************************
 // CONFIG1
-#pragma config FOSC = EXTRC_NOCLKOUT// Oscillator Selection bits (RCIO oscillator: I/O function on RA6/OSC2/CLKOUT pin, RC on RA7/OSC1/CLKIN)
+#pragma config FOSC = INTRC_NOCLKOUT// Oscillator Selection bits (RCIO oscillator: I/O function on RA6/OSC2/CLKOUT pin, RC on RA7/OSC1/CLKIN)
 #pragma config WDTE = OFF       // Watchdog Timer Enable bit (WDT disabled and can be enabled by SWDTEN bit of the WDTCON register)
 #pragma config PWRTE = OFF      // Power-up Timer Enable bit (PWRT disabled)
 #pragma config MCLRE = OFF      // RE3/MCLR pin function select bit (RE3/MCLR pin function is digital input, MCLR internally tied to VDD)
@@ -61,7 +61,7 @@ void main(void) {
         I2C_Master_Write(0x51);
         PORTA = I2C_Master_Read(0);
         I2C_Master_Stop();
-        __delay_ms(200);
+        __delay_ms(50);
         //PORTB++; 
     }
     return;
@@ -77,11 +77,13 @@ void setup(void){
     TRISD = 0;
     
     PORTA = 0;
+    //PORTC = 0;
     PORTB = 0;
     PORTD = 0;
     
+    I2C_Master_Init(100000);        // Inicializar Comuncaci?n I2C
+
     //// --------------- Oscilador --------------- 
     OSCCONbits.IRCF = 0b111; // 8 MHz
     OSCCONbits.SCS = 1; // Seleccionar oscilador interno
-    I2C_Master_Init(100000);        // Inicializar Comuncaci?n I2C
 }
