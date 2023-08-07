@@ -78,19 +78,21 @@ void __interrupt() isr(void){
             SSPCONbits.CKP = 1;         // Enables SCL (Clock)
         }
 
-        if(!SSPSTATbits.D_nA && !SSPSTATbits.R_nW) {
-            //__delay_us(7);
-            z = SSPBUF;                 // Lectura del SSBUF para limpiar el buffer y la bandera BF
-            //__delay_us(2);
-            PIR1bits.SSPIF = 0;         // Limpia bandera de interrupci?n recepci?n/transmisi?n SSP
-            SSPCONbits.CKP = 1;         // Habilita entrada de pulsos de reloj SCL
-            while(!SSPSTATbits.BF);     // Esperar a que la recepci?n se complete
-            //PORTD = SSPBUF;             // Guardar en el PORTD el valor del buffer de recepci?n
-            __delay_us(250);
-            
-        }
         
+        //recepcion de datos
+//        if(!SSPSTATbits.D_nA && !SSPSTATbits.R_nW) {
+//            //__delay_us(7);
+//            z = SSPBUF;                 // Lectura del SSBUF para limpiar el buffer y la bandera BF
+//            //__delay_us(2);
+//            PIR1bits.SSPIF = 0;         // Limpia bandera de interrupci?n recepci?n/transmisi?n SSP
+//            SSPCONbits.CKP = 1;         // Habilita entrada de pulsos de reloj SCL
+//            while(!SSPSTATbits.BF);     // Esperar a que la recepci?n se complete
+//            //PORTD = SSPBUF;             // Guardar en el PORTD el valor del buffer de recepci?n
+//            __delay_us(250);
+//            
+//        }
         
+        //envio de datos
         else if(!SSPSTATbits.D_nA && SSPSTATbits.R_nW){
             z = SSPBUF;
             BF = 0;
@@ -151,8 +153,8 @@ void setup(void){
     OSCCONbits.SCS = 1; // Seleccionar oscilador interno
     
     //INTCONbits.GIE = 1;         // Habilitamos interrupciones
-    INTCONbits.GIE = 1;
-    INTCONbits.PEIE = 1;
+    //INTCONbits.GIE = 1;
+    //INTCONbits.PEIE = 1;
     
     
 }
