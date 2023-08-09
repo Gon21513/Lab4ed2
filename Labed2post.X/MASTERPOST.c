@@ -1,5 +1,5 @@
 /* 
- * File:   prelab3.c
+ * File:   lab.c
  * Author: Luis Pedro Gonzalez 21513
  *
  * Created on 06 de agosto de 2023, 04:09 PM
@@ -89,7 +89,7 @@ void main(void) {
 
     //valores inciales para el reloj 
     Lcd_Set_Cursor(1,1); //Ubica el cursor en la posición 1,1
-    Lcd_Write_String("S1:"); //Muestra el texto "S1:"
+    Lcd_Write_String("ADC:"); //Muestra el texto "S1:"
     Set_sec(0); //Inicializa los segundos a 0
     Set_min(0); //Inicializa los minutos a 0
     Set_hour(22); //Inicializa las horas a 12
@@ -391,7 +391,7 @@ void select(void){
             Lcd_Write_String(buffer); //Mostrar en la LCD
 
             Lcd_Set_Cursor(2,5); //Cursor en 2,5
-            Lcd_Write_String("R"); //Mostrar T de modo reloj
+            Lcd_Write_String("R"); //Mostrar R de modo reloj
         }
         else if (selector == 1){ //Chequar modo
             Lcd_Set_Cursor(2,7); //Cursor en 2,7
