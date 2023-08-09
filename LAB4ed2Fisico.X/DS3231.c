@@ -18,7 +18,7 @@ uint8_t DS3231_ReadSeconds(void) {
     uint8_t secondsBCD;
     
     I2C_Master_Start(); // Comienza la comunicación I2C
-    I2C_Master_Write(DS3231_WRITE_ADDR); // Dirección + Write
+    I2C_Master_Write(DS3231_WRITE_ADDR); // Dirección del modo escritura
     I2C_Master_Write(0x00); // Dirección del registro de segundos- direccion de los minutos en datsheet
     I2C_Master_RepeatedStart(); // Reinicia la comunicación para cambiar a modo de lectura
     I2C_Master_Write(DS3231_READ_ADDR);  // Escribe la dirección del DS3231 en modo lectura
@@ -27,3 +27,5 @@ uint8_t DS3231_ReadSeconds(void) {
     
     return BCDtoBinary(secondsBCD); // Convertir a binario y retornar
 }
+
+
